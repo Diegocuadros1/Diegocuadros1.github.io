@@ -1,0 +1,110 @@
+Groovy {
+  Program = Statement*
+
+  Statement = VarDecl 
+            | StructDecl 
+            | FunDecl
+            | Exp7 (sharp | flat)                                 --bump
+            | Exp7 "=" Exp                                        --assign
+            | Exp7_call                                           --call
+            | cut                                                 --break
+            | fin Exp                                             --return
+            | fin                                                 --shortreturn
+            | play Exp                                            --print
+            | IfStmt
+            | LoopStmt
+
+  Block = Statement*
+
+  VarDecl = (note | key) id "=" Exp
+
+  StructDecl = chord id ":" Field* cadence
+  Field = id ":" Type
+
+  FunDecl = compose id Params ("->" Type)? ":" Block cadence
+  Params = "(" ListOf<Param, ","> ")"
+  Param = id ":" Type
+
+  Type = ghost Type                                               --optional
+       | "[" Type "]"                                             --array
+       | level | lyric | gate | silence | noise                   --primitive
+       | id                                                       --id
+
+  IfStmt = cue Exp ":" Block (alt Exp ":" Block)* (drop ":" Block)? cadence
+
+  LoopStmt = vamp Exp ":" Block cadence                                  --while
+           | encore Exp ":" Block cadence                                --repeat
+           | measure id from Exp to Exp ":" Block cadence                --range
+           | measure id in Exp ":" Block cadence                         --collection
+
+  Exp = Exp1 "?" Exp1 ":" Exp --conditional
+      | Exp1
+  Exp1 = Exp1 "??" Exp2 --unwrapelse
+       | Exp2
+  Exp2 = Exp3 ("||" Exp3)+ --or
+       | Exp3 ("&&" Exp3)+ --and
+       | Exp3
+  Exp3 = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4 --compare
+       | Exp4
+  Exp4 = Exp4 ("+" | "-") Exp5 --add
+       | Exp5
+  Exp5 = Exp5 ("*"| "/" | "%") Exp6 --multiply
+       | Exp6
+  Exp6 = Exp7 "^" Exp6 --power
+       | Exp7
+       | ("-" | "!" | ghost) Exp7 --unary
+
+  Exp7 = open 
+       | closed 
+       | floatlit | intlit
+       | Exp7 "(" ListOf<Exp, ","> ")" --call
+       | Exp7 "[" Exp "]" --subscript
+       | Exp7 ("." | "?.") id --member
+       | stringlit
+       | id --id
+       | "[" NonemptyListOf<Exp, ","> "]" --arrayexp
+       | "(" Exp ")" --parens
+
+  intlit = digit+
+  floatlit = digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
+  stringlit = "\"" char* "\""
+  char = ~control ~"\\" ~"\"" any
+       | "\\" ("n" | "t" | "\"" | "\\") --escape
+       | "\\u{" hex hex? hex? hex? hex? hex? "}" --codepoint
+  control = "\x00".."\x1f" | "\x80".."\x9f"
+  hex = hexDigit
+
+  note = "note" ~alnum
+  key = "key" ~alnum
+  chord = "chord" ~alnum
+  play = "play" ~alnum
+  measure = "measure" ~alnum
+  from = "from" ~alnum
+  to = "to" ~alnum
+  in = "in" ~alnum
+  vamp = "vamp" ~alnum
+  encore = "encore" ~alnum
+  cut = "cut" ~alnum
+  compose = "compose" ~alnum
+  fin = "fin" ~alnum
+  cadence = "cadence" ~alnum
+  cue = "cue" ~alnum
+  alt = "alt" ~alnum
+  drop = "drop" ~alnum
+  gate = "gate" ~alnum
+  open = "open" ~alnum
+  closed = "closed" ~alnum
+  ghost = "ghost" ~alnum
+  level = "level" ~alnum
+  lyric = "lyric" ~alnum
+  silence = "silence" ~alnum
+  noise = "noise" ~alnum
+  sharp = "sharp" ~alnum
+  flat = "flat" ~alnum
+
+  keyword = note | key | chord | play | measure | from | to | in | vamp | encore | cut | compose | fin | cadence | cue | alt | drop | gate | open | closed | ghost | level | lyric | silence | noise | sharp | flat
+
+  id = ~keyword letter alnum*
+  
+  space += "//" (~"\n" any)* --comment
+}

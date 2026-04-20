@@ -1,0 +1,5 @@
+/* App-level layout — component styles live in *.module.css files */
+main {
+  display: block;
+}
+
