@@ -23,7 +23,7 @@ const FEATURES = [
     icon: '◇',
     color: 'var(--lime)',
     title: 'Key goals',
-    body: 'We want to find a way to prove that audio can serve as a programming medium, and to build a real, featured language (variables, functions, structs, loops, type checking) on top of that idea. We also want to make the whole thing interactive so that anyone can write Groovy code and hear it play right in the browser.',
+    body: 'We want to find a way to prove that audio can serve as a programming medium, and to build a real, featured language (variables, functions, structs, loops, type checking). On top of that idea, we also want to make the whole thing interactive so that anyone can write Groovy code and hear it play right in the browser.',
   },
 ]
 
