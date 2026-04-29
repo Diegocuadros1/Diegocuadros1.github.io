@@ -8,12 +8,13 @@ const KEYWORDS = [
 ]
 const ALPHABET  = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 const MATH_CHARS = '0123456789.+-*/%^='
-const SPECIALS   = '{}()[],;:<>'
+const SPECIALS   = `{}()[],;:<>!?&|"'\\_@#$~\``
 
 // Octave offsets keep each channel in a distinct, audible pitch range
 const OFFSET = { 1: 48, 2: 48, 3: 60, 4: 72 }
 
-const NOTE_DUR   = 0.1
+const NOTE_DUR   = 0.19
+const NOTE_GAP   = 0.1
 const GAP_SPACE  = 0.35
 const GAP_NEWLINE = 2.7
 
@@ -89,7 +90,7 @@ function buildMidi(notes) {
       duration: NOTE_DUR,
       velocity: 0.8,
     })
-    time += NOTE_DUR
+    time += NOTE_DUR + NOTE_GAP
   }
 
   return midi

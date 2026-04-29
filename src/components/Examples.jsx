@@ -251,8 +251,7 @@ function AddYourOwnPanel() {
 
       <div className={styles.editorWrap}>
         <p className={styles.editorLabel}>
-          Every character in your Groovy code maps to a MIDI note on a dedicated channel — keywords, letters,
-          digits, and punctuation each get their own pitch range. Write a program and hear it play.
+          Write a program and hear some sound play. There is a type checker to make sure your code is valid. Try writing loops, conditionals, functions, or just experiment with the syntax and see what kind of music you can make!
         </p>
 
         <div className={styles.editorBox}>

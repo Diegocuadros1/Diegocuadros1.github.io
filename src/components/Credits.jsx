@@ -8,7 +8,7 @@ const CREDITS = [
     color: 'var(--cyan)',
   },
   {
-    role: 'Developer and Designer',
+    role: 'Developer',
     name: 'Diego Cuadros',
     detail: '',
     color: 'var(--violet)',
@@ -28,7 +28,7 @@ const CREDITS = [
   {
     role: 'Special Thanks',
     name: 'Ray Toal',
-    detail: 'Insipired and Motivated the project',
+    detail: 'Inspired and motivated the project',
     color: 'var(--yellow)',
   },
 ]
@@ -42,9 +42,6 @@ export default function Credits() {
         <h2 className={styles.title}>
           <span className={styles.accent}>Credits</span>
         </h2>
-        <p className={styles.lead}>
-          With lots of hard work and late nights, this project came together thanks to the efforts of a small team of passionate individuals. We also want to give a special shoutout to Ray Toal for his invaluable inspiration and motivation throughout this journey.
-        </p>
 
         <div className={styles.grid}>
           {CREDITS.map(({ role, name, detail, color }) => (

@@ -5,27 +5,28 @@ const FEATURES = [
     icon: '◈',
     color: 'var(--cyan)',
     title: 'What is it?',
-    body: 'Groovy is a programming language where MIDI is the source code. Instead of typing text, you play music — and the compiler turns those notes into a working JavaScript program. Every Groovy program is simultaneously a piece of music you can listen to and a program a computer can run.',
+    body: 'Groovy is an esoteric programming language where MIDI is the source code. Instead of typing text, you build your own midi file. The compiler turns those notes into a working JavaScript program. Every Groovy program is simultaneously a piece of music you can listen to and a program a computer can run.',
   },
   {
     icon: '◉',
     color: 'var(--violet)',
     title: 'How it works',
-    body: 'A MIDI file has multiple channels. Groovy assigns each one a role: Channel 1 notes decode into keywords (compose, cadence, vamp…), Channel 2 into letters for identifiers, Channel 3 into digits and operators, Channel 4 into punctuation. The pitch of each note selects the exact character via modulo arithmetic. Silence between notes becomes whitespace — a short gap is a space, a longer pause is a newline. The decoded text then flows through a full compiler pipeline: parse → analyze → optimize → generate JavaScript.',
+    body: 'Programs are made by placing notes in a digital editor, with the channel a note lives on determining what kind of character it produces, and the pitch selecting the specific character via modulo arithmetic. Export the MIDI, run it through Groovy, and your performance becomes source code that compiles to JavaScript. A MIDI file contains 16 channels, with channels 1-4 encoding keywords, letters, digits, and punctuation, and channels 5-16 reserved for whitespaces, comments, and unicode characters',
   },
   {
     icon: '◆',
     color: 'var(--pink)',
     title: 'Who is it for?',
-    body: 'Groovy lives at the intersection of music and code. It\'s for musicians curious about programming, developers interested in unconventional language design, and students studying compilers or formal languages. If you\'ve ever wondered what your code would sound like — or what a melody could look like as a running program — this is for you.',
+    body: 'Groovy is to give people a new way to think about programming. It\'s for musicians curious about programming, developers interested in unconventional language design, and students studying compilers or formal languages. If you\'ve ever wondered what your code would sound like or what a melody could look like as a running program, then this is for you.',
   },
   {
     icon: '◇',
     color: 'var(--lime)',
     title: 'Key goals',
-    body: 'Prove that audio can serve as a programming medium. Build a real, full-featured language (variables, functions, structs, loops, type checking) on top of that idea. Explore compiler construction through a hands-on project for CMSI 3802 at LMU. And make the whole thing interactive — so anyone can write Groovy code and hear it play, right in the browser.',
+    body: 'We want to find a way to prove that audio can serve as a programming medium, and to build a real, featured language (variables, functions, structs, loops, type checking) on top of that idea. We also want to make the whole thing interactive so that anyone can write Groovy code and hear it play right in the browser.',
   },
 ]
+
 
 export default function Description() {
   return (
@@ -35,12 +36,12 @@ export default function Description() {
 
         <div className={styles.header}>
           <h2 className={styles.title}>
-            Built at the edge of<br />
-            <span className={styles.accent}>sound & code</span>
+            The development of <br />
+            <span className={styles.accent}>Building a Language</span>
           </h2>
           <p className={styles.lead}>
-            Groovy is a language where music is the source code. Play the right notes
-            in the right order, and the compiler turns your performance into a running JavaScript program.
+            No matter who you are or where you're from, music is globally understood and enjoyed. It crosses language barriers, cultures, and borders. It's one of the few things that truly belongs to everyone.
+
           </p>
         </div>
 
@@ -59,10 +60,10 @@ export default function Description() {
 
         <div className={styles.banner}>
           <div className={styles.bannerTrack}>
-            {['MIDI', 'COMPOSE', 'CADENCE', 'MEASURE', 'VAMP', 'ENCORE', 'PLAY', 'GROOVY'].map((w, i) => (
+            {['Note', 'key', 'chord', 'compose', 'fin', 'play', 'cue', 'alt', 'drop', 'vamp', 'ghost', 'open'].map((w, i) => (
               <span key={i} className={styles.bannerItem}>{w}</span>
             ))}
-            {['MIDI', 'COMPOSE', 'CADENCE', 'MEASURE', 'VAMP', 'ENCORE', 'PLAY', 'GROOVY'].map((w, i) => (
+            {['Note', 'key', 'chord', 'compose', 'fin', 'play', 'cue', 'alt', 'drop', 'vamp', 'ghost', 'open', 'silence'].map((w, i) => (
               <span key={`dup-${i}`} className={styles.bannerItem}>{w}</span>
             ))}
           </div>

@@ -13,12 +13,13 @@ export default function Hero() {
       <div className={styles.content}>
         <div className={styles.logoWrap}>
           <div className={styles.logoRing} />
-          <img src="/logo.png" alt="groovy Logo" className={styles.logoImg} />
+          <img src="./logo.png" alt="groovy Logo" className={styles.logoImg} />
         </div>
+
 
         <p className={styles.eyebrow}>
           <span className={styles.dot} />
-          Code · Beat · Groove
+          Music In &gt; Software Out
         </p>
 
         <h1 className={styles.headline}>
@@ -26,8 +27,8 @@ export default function Hero() {
         </h1>
 
         <p className={styles.sub}>
-          A digital audio experience built at the intersection of<br />
-          <em>music theory, retro aesthetics, and modern code.</em>
+          Programming Languages and Automata<br />
+          <em>Building a compiler that takes in audio input and converts it into executable code.</em>
         </p>
 
         <div className={styles.actions}>
