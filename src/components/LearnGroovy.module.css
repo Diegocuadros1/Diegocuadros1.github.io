@@ -306,7 +306,23 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 5px;
   min-width: 44px;
-  transition: background 0.15s, border-color 0.15s;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+
+.chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--chip-color);
+  box-shadow: 0 0 8px -3px var(--chip-color);
+}
+
+.chip:hover .chipIdx,
+.chip:hover .chipVal {
+  color: var(--chip-color);
+}
+
+.chip:active {
+  transform: scale(0.95);
 }
 
 .chipActive {

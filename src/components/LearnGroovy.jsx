@@ -690,12 +690,19 @@ export default function LearnGroovy() {
             ) : (
               <div className={styles.chipGrid}>
                 {TABLE_DEFS[activeTable].data.map((entry, i) => {
-                  const isActive = TABLE_DEFS[activeTable].ch === channel && i === activeIdx
+                  const def = TABLE_DEFS[activeTable]
+                  const isActive = def.ch === channel && i === activeIdx
                   return (
                     <div
                       key={i}
                       className={`${styles.chip} ${isActive ? styles.chipActive : ''}`}
-                      style={isActive ? { '--chip-color': TABLE_DEFS[activeTable].color } : {}}
+                      style={{ '--chip-color': def.color }}
+                      title={`Click to select in encoder`}
+                      onClick={() => {
+                        handleChannelChange(def.ch)
+                        setPitch(i)
+                        setOctave(Math.max(0, Math.min(8, Math.floor(i / 12) - 1)))
+                      }}
                     >
                       <span className={styles.chipIdx}>{i}</span>
                       <span className={styles.chipVal}>{entry}</span>
@@ -847,6 +854,9 @@ export default function LearnGroovy() {
                           ? <StopIcon />
                           : <PlayIcon />}
                       {playerState === 'loading' ? 'Loading…' : playerState === 'playing' ? 'Stop' : 'Play'}
+                    </button>
+                    <button className={styles.clearBtn} onClick={() => setSequence(prev => prev.slice(0, -1))}>
+                      Delete
                     </button>
                     <button className={styles.clearBtn} onClick={() => { stopPlayer(); setSequence([]) }}>
                       Clear
