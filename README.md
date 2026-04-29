@@ -3,6 +3,10 @@
 # Groovy
 Music in, software out.
 
+### Real code is located in Groovy Repository
+
+Link to repository: [Groovy](https://github.com/jdillon96/Groovy)
+
 
 ## Team Members:
 * Diego Cuadros
