@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import * as Tone from 'tone'
 import { Midi } from '@tonejs/midi'
 import { midi_files } from '../data/data'
-import { encodeGroovy, noteCount } from '../encoder'
+import { generateMidi, noteCount } from '../textToMidi'
 import HighlightedCode from './HighlightedCode'
 import { validateGroovy } from '../validator'
 import compile from '../compiler/compiler'
@@ -250,7 +250,7 @@ function AddYourOwnPanel() {
       return
     }
     setCompiledJs(js)
-    playMidi(encodeGroovy(code))
+    playMidi(generateMidi(code))
   }, [playing, stop, code, playMidi])
 
   return (

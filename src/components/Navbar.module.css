@@ -116,6 +116,11 @@
   transition: transform 0.3s, opacity 0.3s;
 }
 
+/* gap(5px) + height(2px) = 7px shift to overlap the middle line */
+.burgerLine1Open { transform: translateY(7px) rotate(45deg); }
+.burgerLine2Open { opacity: 0; transform: scaleX(0); }
+.burgerLine3Open { transform: translateY(-7px) rotate(-45deg); }
+
 @media (max-width: 768px) {
   .burger {
     display: flex;

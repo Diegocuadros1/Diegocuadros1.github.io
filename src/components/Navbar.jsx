@@ -53,9 +53,9 @@ export default function Navbar() {
           onClick={() => setMenuOpen(o => !o)}
           aria-label="Toggle menu"
         >
-          <span className={menuOpen ? styles.burgerLineOpen : ''} />
-          <span className={menuOpen ? styles.burgerLineOpen : ''} />
-          <span className={menuOpen ? styles.burgerLineOpen : ''} />
+          <span className={menuOpen ? styles.burgerLine1Open : ''} />
+          <span className={menuOpen ? styles.burgerLine2Open : ''} />
+          <span className={menuOpen ? styles.burgerLine3Open : ''} />
         </button>
       </div>
     </nav>
