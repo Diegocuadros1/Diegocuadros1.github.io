@@ -399,7 +399,7 @@ export default function LearnGroovy() {
   const [expandedStep, setExpandedStep] = useState(null)
   const [channel, setChannel]           = useState(1)
   const [pitch, setPitch]               = useState(60)
-  const [octave, setOctave]             = useState(4)
+  const [octave, setOctave]             = useState(0)
   const [sequence, setSequence]         = useState([])
   const [unicodeCh, setUnicodeCh]       = useState(7)
   const [unicodePitch, setUnicodePitch] = useState(60)
@@ -702,6 +702,7 @@ export default function LearnGroovy() {
                         handleChannelChange(def.ch)
                         setPitch(i)
                         setOctave(Math.max(0, Math.min(8, Math.floor(i / 12) - 1)))
+                        triggerPreviewNote(def.ch, i)
                       }}
                     >
                       <span className={styles.chipIdx}>{i}</span>
@@ -751,7 +752,7 @@ export default function LearnGroovy() {
                     value={pitch}
                     className={styles.pitchSlider}
                     style={{ '--slider-color': chInfo.color }}
-                    onChange={e => setPitch(Number(e.target.value))}
+                    onChange={e => { const p = Number(e.target.value); setPitch(p); triggerPreviewNote(channel, p) }}
                   />
                   <span className={styles.pitchNum}>{pitch}</span>
                 </div>

@@ -5,6 +5,7 @@ import { midi_files } from '../data/data'
 import { encodeGroovy, noteCount } from '../encoder'
 import HighlightedCode from './HighlightedCode'
 import { validateGroovy } from '../validator'
+import compile from '../compiler/compiler'
 import styles from './Examples.module.css'
 
 // ─── Shared MIDI engine ────────────────────────────────────────────────────
@@ -35,7 +36,6 @@ function useMidiPlayer() {
     setElapsed(0)
   }, [teardown])
 
-  // Shared scheduling logic — takes a parsed Midi object and starts playback
   const _run = useCallback((midi) => {
     setDuration(midi.duration)
     Tone.getTransport().cancel()
@@ -70,7 +70,6 @@ function useMidiPlayer() {
     }, 200)
   }, [teardown])
 
-  // Play from a URL (fetches + parses MIDI file)
   const play = useCallback(async (url) => {
     if (state === 'playing') { stop(); return }
     setState('loading')
@@ -91,7 +90,6 @@ function useMidiPlayer() {
     }
   }, [state, stop, _run])
 
-  // Play from an already-built @tonejs/midi Midi object (used by the encoder)
   const playMidi = useCallback(async (midi) => {
     if (state === 'playing') { stop(); return }
     setState('loading')
@@ -162,7 +160,7 @@ function CodeBlock({ groovy, js }) {
   )
 }
 
-// ─── Single song tab panel ─────────────────────────────────────────────────
+// ─── Single song panel ─────────────────────────────────────────────────────
 
 function SongPanel({ entry }) {
   const { state, elapsed, duration, play } = useMidiPlayer()
@@ -230,6 +228,7 @@ cadence`
 function AddYourOwnPanel() {
   const [code, setCode] = useState(DEFAULT_CODE)
   const [error, setError] = useState(null)
+  const [compiledJs, setCompiledJs] = useState(null)
   const { state, elapsed, duration, playMidi, stop } = useMidiPlayer()
   const playing = state === 'playing'
   const loading = state === 'loading'
@@ -237,9 +236,20 @@ function AddYourOwnPanel() {
 
   const handlePlay = useCallback(() => {
     if (playing) { stop(); return }
+
     const result = validateGroovy(code)
-    if (!result.ok) { setError(result.error); return }
+    if (!result.ok) { setError(result.error); setCompiledJs(null); return }
     setError(null)
+
+    let js = null
+    try {
+      js = compile(code, 'js')
+    } catch (e) {
+      setError(e.message)
+      setCompiledJs(null)
+      return
+    }
+    setCompiledJs(js)
     playMidi(encodeGroovy(code))
   }, [playing, stop, code, playMidi])
 
@@ -251,7 +261,9 @@ function AddYourOwnPanel() {
 
       <div className={styles.editorWrap}>
         <p className={styles.editorLabel}>
-          Write a program and hear some sound play. There is a type checker to make sure your code is valid. Try writing loops, conditionals, functions, or just experiment with the syntax and see what kind of music you can make!
+          Write a program, then hit <strong>Play &amp; Compile</strong> — it plays the MIDI
+          and shows the compiled JavaScript side by side. There is a type checker to make sure
+          your code is valid. Try loops, conditionals, functions, or just experiment with the syntax!
         </p>
 
         <div className={styles.editorBox}>
@@ -266,7 +278,7 @@ function AddYourOwnPanel() {
           <textarea
             className={styles.editorTextarea}
             value={code}
-            onChange={e => { setCode(e.target.value); setError(null) }}
+            onChange={e => { setCode(e.target.value); setError(null); setCompiledJs(null) }}
             spellCheck={false}
             autoComplete="off"
             autoCorrect="off"
@@ -281,11 +293,11 @@ function AddYourOwnPanel() {
             disabled={loading || !code.trim()}
           >
             {loading ? <SpinnerIcon /> : playing ? <StopIcon /> : <PlayIcon />}
-            {loading ? 'Encoding…' : playing ? 'Stop' : 'Play'}
+            {loading ? 'Compiling…' : playing ? 'Stop' : 'Play & Compile'}
           </button>
           <button
             className={styles.clearBtn}
-            onClick={() => { stop(); setCode('') }}
+            onClick={() => { stop(); setCode(''); setError(null); setCompiledJs(null) }}
           >
             Clear
           </button>
@@ -304,7 +316,7 @@ function AddYourOwnPanel() {
               </div>
               <div className={styles.playerMeta}>
                 <span className={styles.playerTitle}>My Composition</span>
-                <span className={styles.playerStatus}>{loading ? 'Encoding…' : 'Now playing'}</span>
+                <span className={styles.playerStatus}>{loading ? 'Compiling…' : 'Now playing'}</span>
               </div>
             </div>
             <ProgressBar elapsed={elapsed} duration={duration} />
@@ -315,6 +327,12 @@ function AddYourOwnPanel() {
             </div>
           </div>
         )}
+
+        {compiledJs && (
+          <div style={{ marginTop: '28px' }}>
+            <CodeBlock groovy={code} js={compiledJs} />
+          </div>
+        )}
       </div>
     </div>
   )
@@ -323,8 +341,8 @@ function AddYourOwnPanel() {
 // ─── Main Examples section ─────────────────────────────────────────────────
 
 export default function Examples() {
-  const [activeTab, setActiveTab] = useState(0)
-  const tabs = [...midi_files, { title: 'Add-your-own', _own: true }]
+  const [activeIdx, setActiveIdx] = useState(0)
+  const [showOwn, setShowOwn] = useState(false)
 
   return (
     <section id="examples" className={styles.section}>
@@ -338,24 +356,35 @@ export default function Examples() {
           Flip between Groovy and JavaScript to compare.
         </p>
 
-        <div className={styles.tabBar}>
-          {tabs.map((t, i) => (
-            <button
-              key={t.title}
-              className={`${styles.tab} ${activeTab === i ? styles.tabActive : ''} ${t._own ? styles.tabOwn : ''}`}
-              onClick={() => setActiveTab(i)}
+        <div className={styles.selectRow}>
+          <div className={styles.selectWrap}>
+            <select
+              className={`${styles.exampleSelect} ${showOwn ? styles.exampleSelectDimmed : ''}`}
+              value={activeIdx}
+              onChange={e => { setActiveIdx(Number(e.target.value)); setShowOwn(false) }}
             >
-              {t._own && <span className={styles.tabOwnDot} />}
-              {t.title}
-            </button>
-          ))}
-          <div className={styles.tabIndicator} style={{ '--count': tabs.length, '--idx': activeTab }} />
+              {midi_files.map((entry, i) => (
+                <option key={entry.title} value={i}>{entry.title}</option>
+              ))}
+            </select>
+            <ChevronIcon />
+          </div>
+          <span className={styles.selectCount}>
+            {showOwn ? '' : `${activeIdx + 1} / ${midi_files.length}`}
+          </span>
+          <button
+            className={`${styles.addOwnBtn} ${showOwn ? styles.addOwnBtnActive : ''}`}
+            onClick={() => setShowOwn(v => !v)}
+          >
+            <span className={styles.addOwnDot} />
+            Add your own
+          </button>
         </div>
 
         <div className={styles.tabContent}>
-          {tabs[activeTab]._own
+          {showOwn
             ? <AddYourOwnPanel />
-            : <SongPanel key={tabs[activeTab].title} entry={tabs[activeTab]} />
+            : <SongPanel key={midi_files[activeIdx].title} entry={midi_files[activeIdx]} />
           }
         </div>
       </div>
@@ -379,4 +408,7 @@ function GroovyIcon() {
 }
 function JsIcon() {
   return <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><rect width="12" height="12" rx="2" fill="currentColor" opacity="0.2"/><text x="2" y="10" fontSize="8" fontWeight="bold" fill="currentColor" fontFamily="monospace">JS</text></svg>
+}
+function ChevronIcon() {
+  return <svg className={styles.chevron} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>
 }

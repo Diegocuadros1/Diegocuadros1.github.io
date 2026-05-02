@@ -71,7 +71,8 @@
 
 .encodingLead {
   font-size: 0.95rem;
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  opacity: 0.75;
   line-height: 1.7;
   max-width: 680px;
   margin-bottom: 36px;
@@ -94,7 +95,8 @@
 
 .encodingSublead {
   font-size: 0.88rem;
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  opacity: 0.65;
   line-height: 1.65;
   max-width: 620px;
   margin-bottom: 24px;
@@ -128,7 +130,7 @@
 }
 
 .pipeArrow {
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: 1rem;
   line-height: 1;
   flex-shrink: 0;
@@ -198,7 +200,7 @@
 .channelCardFormula {
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   line-height: 1.5;
   word-break: break-all;
 }
@@ -267,7 +269,7 @@
   font-weight: 600;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 5px;
@@ -342,14 +344,14 @@
 .chipIdx {
   font-family: var(--font-mono);
   font-size: 0.6rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   line-height: 1;
 }
 
 .chipVal {
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   font-weight: 600;
   line-height: 1;
   white-space: nowrap;
@@ -427,7 +429,7 @@
   font-size: 0.65rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   width: 60px;
   flex-shrink: 0;
 }
@@ -517,7 +519,7 @@
   font-size: 0.58rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .unicodeResultVal {
@@ -593,7 +595,7 @@
 
 .unicodeRangeBlock {
   font-size: 0.78rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   line-height: 1.4;
 }
 
@@ -629,7 +631,8 @@
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-primary);
+  opacity: 0.6;
   flex-shrink: 0;
   width: 52px;
   padding-top: 10px;
@@ -678,7 +681,7 @@
 
 .channelBtnLbl {
   font-size: 0.65rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   white-space: nowrap;
 }
 
@@ -740,7 +743,7 @@
 .pitchNum {
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   flex-shrink: 0;
   width: 28px;
 }
@@ -824,29 +827,33 @@
 
 .octaveBtn {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 4px 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cyan);
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 6px;
+  padding: 8px 18px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, box-shadow 0.15s;
+  line-height: 1;
 }
 
 .octaveBtn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 240, 255, 0.16);
+  box-shadow: 0 0 12px -4px var(--cyan);
 }
 
 .octaveBtn:disabled {
-  opacity: 0.3;
+  opacity: 0.25;
   cursor: default;
 }
 
 .octaveLabel {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
 /* ── Preview ── */
@@ -889,7 +896,7 @@
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--ch-color);
-  opacity: 0.5;
+  opacity: 0.75;
 }
 
 .formulaBox {
@@ -915,7 +922,8 @@
   font-size: 0.63rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-primary);
+  opacity: 0.55;
   flex-shrink: 0;
   width: 56px;
 }
@@ -923,7 +931,8 @@
 .formulaVal {
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  opacity: 0.75;
   word-break: break-all;
 }
 
@@ -1074,7 +1083,7 @@
 
 .seqHint {
   font-size: 0.72rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-style: italic;
 }
 
