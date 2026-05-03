@@ -84,12 +84,11 @@ function decodeNote(ch, pitch) {
   return { token: '', display: '— dropped —', index: null, formula: 'Channel 6: comment track, always dropped' }
 }
 
-// Audio engine 
-// Mirrors the octave offsets from encoder.js so notes sound identical to
-// what ends up in the exported MIDI file.
-const CHANNEL_OFFSET = { 1: 48, 2: 48, 3: 60, 4: 72 }
-const NOTE_DUR = 0.19
-const NOTE_GAP = 0.1
+// Audio engine
+// Pitch values stored in the sequence are already MIDI note numbers matching
+// the REVERSE_MAP in textToMidi.js — no per-channel offset is needed.
+const NOTE_DUR = 0.25
+const NOTE_GAP = 0.0
 const WS_GAPS  = [0.35, 0.8, 2.5]
 
 function buildSequenceMidi(seq) {
@@ -114,9 +113,8 @@ function buildSequenceMidi(seq) {
       time += NOTE_DUR + NOTE_GAP
       continue
     }
-    const offset = CHANNEL_OFFSET[ch]
-    if (!offset) continue
-    tracks[ch].addNote({ midi: Math.min(127, p + offset), time, duration: NOTE_DUR, velocity: 0.8 })
+    if (!tracks[ch]) continue
+    tracks[ch].addNote({ midi: Math.min(127, p), time, duration: NOTE_DUR, velocity: 0.8 })
     time += NOTE_DUR + NOTE_GAP
   }
   return midi
@@ -399,7 +397,7 @@ export default function LearnGroovy() {
   const [expandedStep, setExpandedStep] = useState(null)
   const [channel, setChannel]           = useState(1)
   const [pitch, setPitch]               = useState(60)
-  const [octave, setOctave]             = useState(0)
+  const [octave, setOctave]             = useState(4)
   const [sequence, setSequence]         = useState([])
   const [unicodeCh, setUnicodeCh]       = useState(7)
   const [unicodePitch, setUnicodePitch] = useState(60)
@@ -412,10 +410,7 @@ export default function LearnGroovy() {
 
   const triggerPreviewNote = useCallback(async (ch, p) => {
     if (ch === 5) return // whitespace has no sound
-    // Ch 6: pitch used directly as MIDI note (no offset — "play whatever you want")
-    const midiNote = ch === 6
-      ? Math.min(127, p)
-      : Math.min(127, p + (CHANNEL_OFFSET[ch] ?? 0))
+    const midiNote = Math.min(127, p)
     if (!midiNote && ch !== 6) return
     try {
       await Tone.start()
@@ -470,6 +465,19 @@ export default function LearnGroovy() {
   }
 
   const outputText = sequence.map(n => n.token).join('')
+
+  function downloadSequence() {
+    if (sequence.length === 0) return
+    const midi = buildSequenceMidi(sequence)
+    const bytes = midi.toArray()
+    const blob = new Blob([bytes], { type: 'audio/midi' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'my-composition.mid'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
   const pct = duration > 0 ? (elapsed / duration) * 100 : 0
   const fmtTime = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 
@@ -700,9 +708,11 @@ export default function LearnGroovy() {
                       title={`Click to select in encoder`}
                       onClick={() => {
                         handleChannelChange(def.ch)
-                        setPitch(i)
-                        setOctave(Math.max(0, Math.min(8, Math.floor(i / 12) - 1)))
-                        triggerPreviewNote(def.ch, i)
+                        const len = def.data.length
+                        const p = i + Math.floor(60 / len) * len
+                        setPitch(p)
+                        setOctave(Math.max(0, Math.min(8, Math.floor(p / 12) - 1)))
+                        triggerPreviewNote(def.ch, p)
                       }}
                     >
                       <span className={styles.chipIdx}>{i}</span>
@@ -855,6 +865,9 @@ export default function LearnGroovy() {
                           ? <StopIcon />
                           : <PlayIcon />}
                       {playerState === 'loading' ? 'Loading…' : playerState === 'playing' ? 'Stop' : 'Play'}
+                    </button>
+                    <button className={styles.clearBtn} onClick={downloadSequence}>
+                      ↓ Download .mid
                     </button>
                     <button className={styles.clearBtn} onClick={() => setSequence(prev => prev.slice(0, -1))}>
                       Delete

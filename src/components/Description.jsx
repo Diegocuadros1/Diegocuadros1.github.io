@@ -37,7 +37,7 @@ export default function Description() {
         <div className={styles.header}>
           <h2 className={styles.title}>
             Building <br />
-            <span className={styles.accent}>Music with Code</span>
+            <span className={styles.accent}>Code with Music</span>
           </h2>
           <p className={styles.lead}>
             No matter who you are or where you're from, music is globally understood and enjoyed. It crosses language barriers, cultures, and borders. It's one of the few things that truly belongs to everyone.
