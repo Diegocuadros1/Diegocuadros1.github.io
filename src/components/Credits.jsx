@@ -2,27 +2,27 @@ import styles from './Credits.module.css'
 
 const CREDITS = [
   {
-    role: 'Developer and Project Lead',
+    role: 'Developer',
     name: 'Jay Dillon',
-    detail: '',
+    detail: 'Senior @ LMU, main language designer, built preprocessor, compiler language. Project Lead',
     color: 'var(--cyan)',
   },
   {
     role: 'Developer',
     name: 'Diego Cuadros',
-    detail: '',
+    detail: 'Junior @ LMU, implemented Groovy Playground, and built Website',
     color: 'var(--violet)',
   },
   {
     role: 'Developer',
     name: 'Jesus Lopez',
-    detail: '',
+    detail: 'Junior @ LMU, designed Groovy keywords, and language features.',
     color: 'var(--pink)',
   },
   {
     role: 'Developer',
     name: 'Westley Holmes',
-    detail: '',
+    detail: 'Junior @ LMU, worked on documentation, language design, and testing.',
     color: 'var(--lime)',
   },
   {
